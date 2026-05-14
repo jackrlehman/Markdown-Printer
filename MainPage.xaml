@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MDPrinter.ViewModels"
+             x:Class="MDPrinter.MainPage"
+             x:DataType="viewModels:MainPageViewModel"
+             Title="MD Printer"
+             BackgroundColor="{AppThemeBinding Light=#FFF5F5, Dark=#120708}">
+    <ContentPage.Resources>
+        <Style x:Key="PrimaryActionButtonStyle"
+               TargetType="Button">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light=#B91C1C, Dark=#DC2626}" />
+            <Setter Property="TextColor"
+                    Value="White" />
+            <Setter Property="CornerRadius"
+                    Value="14" />
+            <Setter Property="Padding"
+                    Value="18,12" />
+            <Setter Property="BorderWidth"
+                    Value="1" />
+            <Setter Property="BorderColor"
+                    Value="{AppThemeBinding Light=#991B1B, Dark=#FCA5A5}" />
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+        </Style>
+
+        <Style x:Key="SecondaryActionButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource PrimaryActionButtonStyle}">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light=#7F1D1D, Dark=#991B1B}" />
+        </Style>
+
+        <Style x:Key="SurfaceBorderStyle"
+               TargetType="Border">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light=#FFFFFF, Dark=#1A0B0E}" />
+            <Setter Property="Stroke"
+                    Value="{AppThemeBinding Light=#F1B9C1, Dark=#7F1D1D}" />
+            <Setter Property="StrokeShape"
+                    Value="RoundRectangle 18" />
+            <Setter Property="StrokeThickness"
+                    Value="1" />
+        </Style>
+
+        <Style x:Key="PanelTitleStyle"
+               TargetType="Label">
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light=#7F1D1D, Dark=#FCA5A5}" />
+        </Style>
+
+        <Style x:Key="PanelActionIconStyle"
+               TargetType="Grid">
+            <Setter Property="HeightRequest"
+                    Value="24" />
+            <Setter Property="WidthRequest"
+                    Value="24" />
+            <Setter Property="Opacity"
+                    Value="1" />
+            <Style.Triggers>
+                <Trigger TargetType="Grid"
+                         Property="IsEnabled"
+                         Value="False">
+                    <Setter Property="Opacity"
+                            Value="0.35" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid Padding="24"
+              RowDefinitions="Auto,*"
+              RowSpacing="18">
+            <VerticalStackLayout Grid.Row="0"
+                                 Spacing="4">
+                <Label Text="MD Printer"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#7F1D1D, Dark=#FCA5A5}"
+                       SemanticProperties.HeadingLevel="Level1" />
+                <Label Text="Paste raw markdown, preview the rendered output, then open a larger output preview to save or print it."
+                       TextColor="{AppThemeBinding Light=#991B1B, Dark=#FECACA}" />
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="*,*"
+                  ColumnSpacing="18">
+                <Border Grid.Column="0"
+                        Style="{StaticResource SurfaceBorderStyle}"
+                        Padding="16">
+                    <Grid RowDefinitions="Auto,*"
+                          RowSpacing="12">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <Label Text="Raw markdown - paste or type here."
+                                   Style="{StaticResource PanelTitleStyle}"
+                                   VerticalOptions="Center" />
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="18"
+                                                   HorizontalOptions="End">
+                                <Grid Style="{StaticResource PanelActionIconStyle}"
+                                      SemanticProperties.Description="Paste clipboard">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding PasteFromClipboardCommand}" />
+                                    </Grid.GestureRecognizers>
+                                    <Path Data="M16 1H8C6.9 1 6 1.9 6 3v2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7l-6-6zm-6 2h4v2h-4V3zm10 18H4V7h2v2h12V7.17L20 9v12z"
+                                          Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                          Aspect="Uniform"
+                                          HorizontalOptions="Fill"
+                                          VerticalOptions="Fill" />
+                                </Grid>
+                                <Grid Style="{StaticResource PanelActionIconStyle}"
+                                      IsEnabled="{Binding HasMarkdown}"
+                                      SemanticProperties.Description="Clear markdown">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ClearCommand}" />
+                                    </Grid.GestureRecognizers>
+                                    <Path Data="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3.46-7.12 1.41-1.41L12 11.59l1.12-1.12 1.41 1.41L13.41 13l1.12 1.12-1.41 1.41L12 14.41l-1.12 1.12-1.41-1.41L10.59 13l-1.13-1.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"
+                                          Fill="{AppThemeBinding Light=#7F1D1D, Dark=#FECACA}"
+                                          Aspect="Uniform"
+                                          HorizontalOptions="Fill"
+                                          VerticalOptions="Fill" />
+                                </Grid>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <ScrollView x:Name="RawMarkdownScrollView"
+                                    Grid.Row="1"
+                                    VerticalOptions="Fill"
+                                    Orientation="Vertical">
+                            <Editor Text="{Binding RawMarkdown}"
+                                    AutoSize="TextChanges"
+                                    MinimumHeightRequest="{Binding Source={x:Reference RawMarkdownScrollView}, Path=Height}"
+                                    VerticalOptions="Start"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#2A1314, Dark=#FDE8E8}"
+                                    PlaceholderColor="{AppThemeBinding Light=#9F6A72, Dark=#FECACA}"
+                                    Placeholder="Paste or type markdown here..."
+                                    FontFamily="OpenSansRegular" />
+                        </ScrollView>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource SurfaceBorderStyle}"
+                        Padding="16">
+                    <Grid RowDefinitions="Auto,*"
+                          RowSpacing="12">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <Label Text="Rendered preview"
+                                   Style="{StaticResource PanelTitleStyle}"
+                                   VerticalOptions="Center" />
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="18"
+                                                   HorizontalOptions="End">
+                                <Grid Style="{StaticResource PanelActionIconStyle}"
+                                      IsEnabled="{Binding HasMarkdown}"
+                                      SemanticProperties.Description="Save output">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenSavePreviewCommand}" />
+                                    </Grid.GestureRecognizers>
+                                    <Path Data="M17 3H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM15 9H5V5h10v4z"
+                                          Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                          Aspect="Uniform"
+                                          HorizontalOptions="Fill"
+                                          VerticalOptions="Fill" />
+                                </Grid>
+                                <Grid Style="{StaticResource PanelActionIconStyle}"
+                                      IsEnabled="{Binding HasMarkdown}"
+                                      SemanticProperties.Description="Print output">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenPrintPreviewCommand}" />
+                                    </Grid.GestureRecognizers>
+                                    <Path Data="M19 8H5c-1.66 0-3 1.34-3 3v4h4v4h12v-4h4v-4c0-1.66-1.34-3-3-3zm-3 9H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V1z"
+                                          Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                          Aspect="Uniform"
+                                          HorizontalOptions="Fill"
+                                          VerticalOptions="Fill" />
+                                </Grid>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <WebView Grid.Row="1"
+                                 VerticalOptions="Fill"
+                                 Source="{Binding PreviewSource}" />
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Grid IsVisible="{Binding IsOutputPreviewOpen}"
+              BackgroundColor="#C0000000"
+              Padding="16">
+            <Border Padding="20"
+                    BackgroundColor="{AppThemeBinding Light=#FFF8F8, Dark=#140809}"
+                    Stroke="{AppThemeBinding Light=#F1B9C1, Dark=#991B1B}"
+                    StrokeShape="RoundRectangle 22"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center"
+                    MaximumWidthRequest="1925"
+                    MaximumHeightRequest="900">
+                <Grid RowDefinitions="Auto,Auto,*"
+                      RowSpacing="16">
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Output preview"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#7F1D1D, Dark=#FCA5A5}" />
+                            <Label Text="Adjust page layout and base text size before saving or printing."
+                                   TextColor="{AppThemeBinding Light=#991B1B, Dark=#FECACA}" />
+                        </VerticalStackLayout>
+                        <Grid Grid.Column="1"
+                              Style="{StaticResource PanelActionIconStyle}"
+                              SemanticProperties.Description="Close output preview"
+                              HorizontalOptions="End"
+                              VerticalOptions="Center">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CloseOutputPreviewCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Path Data="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                  Fill="{AppThemeBinding Light=#7F1D1D, Dark=#FECACA}"
+                                  Aspect="Uniform"
+                                  HorizontalOptions="Fill"
+                                  VerticalOptions="Fill" />
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="240,260,150,*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="24"
+                          RowSpacing="8">
+                        <Label Text="Page layout"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               Style="{StaticResource PanelTitleStyle}" />
+                        <Label Text="Base text size"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               Style="{StaticResource PanelTitleStyle}" />
+                        <Label Text="Page numbers"
+                               Grid.Row="0"
+                               Grid.Column="2"
+                               Style="{StaticResource PanelTitleStyle}" />
+
+                        <Border Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource SurfaceBorderStyle}"
+                                Padding="6,0">
+                            <Picker ItemsSource="{Binding PageOrientations}"
+                                    SelectedItem="{Binding SelectedPageOrientation}"
+                                    TextColor="{AppThemeBinding Light=#2A1314, Dark=#FDE8E8}" />
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="1"
+                                               Grid.Column="1"
+                                               Spacing="18"
+                                               VerticalOptions="Center">
+                            <Grid Style="{StaticResource PanelActionIconStyle}"
+                                  IsEnabled="{Binding CanDecreaseBaseTextSize}"
+                                  SemanticProperties.Description="Decrease base text size">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding DecreaseBaseTextSizeCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Path Data="M19 13H5v-2h14v2z"
+                                      Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                      Aspect="Uniform"
+                                      HorizontalOptions="Fill"
+                                      VerticalOptions="Fill" />
+                            </Grid>
+                            <Label Text="{Binding BaseTextSizeLabel}"
+                                   VerticalOptions="Center"
+                                   FontAttributes="Bold"
+                                   FontSize="18"
+                                   TextColor="{AppThemeBinding Light=#7F1D1D, Dark=#FCA5A5}" />
+                            <Grid Style="{StaticResource PanelActionIconStyle}"
+                                  IsEnabled="{Binding CanIncreaseBaseTextSize}"
+                                  SemanticProperties.Description="Increase base text size">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding IncreaseBaseTextSizeCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Path Data="M19 13H13V19H11V13H5V11H11V5H13V11H19V13z"
+                                      Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                      Aspect="Uniform"
+                                      HorizontalOptions="Fill"
+                                      VerticalOptions="Fill" />
+                            </Grid>
+                        </HorizontalStackLayout>
+
+                        <CheckBox Grid.Row="1"
+                                  Grid.Column="2"
+                                  IsChecked="{Binding IncludePageNumbers}"
+                                  Color="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                  HorizontalOptions="Start"
+                                  VerticalOptions="Center"
+                                  SemanticProperties.Description="Include page numbers" />
+
+                        <HorizontalStackLayout Grid.Row="1"
+                                               Grid.Column="4"
+                                               Spacing="18"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="Center">
+                            <Grid Style="{StaticResource PanelActionIconStyle}"
+                                  IsEnabled="{Binding HasMarkdown}"
+                                  SemanticProperties.Description="Save output">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SaveMarkdownCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Path Data="M17 3H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM15 9H5V5h10v4z"
+                                      Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                      Aspect="Uniform"
+                                      HorizontalOptions="Fill"
+                                      VerticalOptions="Fill" />
+                            </Grid>
+                            <Grid Style="{StaticResource PanelActionIconStyle}"
+                                  IsEnabled="{Binding HasMarkdown}"
+                                  SemanticProperties.Description="Print output">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPrintIconTapped" />
+                                </Grid.GestureRecognizers>
+                                <Path Data="M19 8H5c-1.66 0-3 1.34-3 3v4h4v4h12v-4h4v-4c0-1.66-1.34-3-3-3zm-3 9H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V1z"
+                                      Fill="{AppThemeBinding Light=#B91C1C, Dark=#FCA5A5}"
+                                      Aspect="Uniform"
+                                      HorizontalOptions="Fill"
+                                      VerticalOptions="Fill" />
+                            </Grid>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Border Grid.Row="2"
+                            Style="{StaticResource SurfaceBorderStyle}"
+                            Padding="12">
+                        <WebView x:Name="ExpandedPreviewWebView"
+                                 HeightRequest="620"
+                                 Source="{Binding PreviewSource}" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
