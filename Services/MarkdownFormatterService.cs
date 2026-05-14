@@ -11,6 +11,7 @@ internal sealed partial class MarkdownFormatterService : IMarkdownFormatterServi
 
 	private readonly MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
 		.UseAdvancedExtensions()
+		.DisableHtml()
 		.Build();
 
 	public string Normalize(string rawMarkdown)
@@ -100,6 +101,7 @@ internal sealed partial class MarkdownFormatterService : IMarkdownFormatterServi
 		<head>
 		    <meta charset="utf-8" />
 		    <meta name="viewport" content="width=device-width, initial-scale=1" />
+		    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https:;" />
 		    <title>{{encodedTitle}}</title>
 		    <style>
 		        @page {
