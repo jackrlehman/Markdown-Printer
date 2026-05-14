@@ -28,7 +28,6 @@ public static class MauiProgram
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
 		EditorHandler.Mapper.AppendToMapping("RedEditorFocus", (handler, view) =>

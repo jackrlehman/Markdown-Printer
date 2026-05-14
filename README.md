@@ -1,6 +1,6 @@
-# MD Printer
+# Markdown Printer
 
-MD Printer is a desktop-focused .NET MAUI app for turning raw markdown into a print-ready document.
+Markdown Printer is a desktop-focused .NET MAUI app for turning raw markdown into a print-ready document.
 
 Paste or type markdown on the left, review the rendered result on the right, then open the output preview to:
 

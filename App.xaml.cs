@@ -1,10 +1,11 @@
 namespace MDPrinter;
 
 /// <summary>
-/// Hosts the MD Printer application lifecycle.
+/// Hosts the Markdown Printer application lifecycle.
 /// </summary>
 public partial class App : Application
 {
+	private const string ApplicationWindowTitle = "Markdown Printer";
 	private readonly MainPage mainPage;
 
 	/// <summary>
@@ -15,6 +16,7 @@ public partial class App : Application
 	{
 		InitializeComponent();
 		this.mainPage = mainPage;
+		this.mainPage.Title = ApplicationWindowTitle;
 	}
 
 	/// <summary>
@@ -24,6 +26,9 @@ public partial class App : Application
 	/// <returns>The configured application window.</returns>
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(mainPage);
+		return new Window(mainPage)
+		{
+			Title = ApplicationWindowTitle
+		};
 	}
 }

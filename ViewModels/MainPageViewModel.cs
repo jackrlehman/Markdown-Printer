@@ -36,7 +36,7 @@ public sealed class MainPageViewModel : ObservableObject
 	private bool isOutputPreviewOpen;
 	private HtmlWebViewSource previewSource = new();
 	private string rawMarkdown = """
-# Welcome to MD Printer
+# Welcome to Markdown Printer
 
 Paste raw markdown here, then open the larger output preview to save or print the generated file.
 

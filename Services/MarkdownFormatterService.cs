@@ -78,7 +78,7 @@ internal sealed partial class MarkdownFormatterService : IMarkdownFormatterServi
 
 	public string ToHtmlDocument(string title, string markdown, bool useLandscapeLayout, double baseTextSize, bool includePageNumbers)
 	{
-		var encodedTitle = WebUtility.HtmlEncode(string.IsNullOrWhiteSpace(title) ? "MD Printer Document" : title.Trim());
+		var encodedTitle = WebUtility.HtmlEncode(string.IsNullOrWhiteSpace(title) ? "Markdown Printer Document" : title.Trim());
 		var htmlBody = string.IsNullOrWhiteSpace(markdown)
 			? EmptyPreviewMessage
 			: Markdown.ToHtml(markdown, pipeline);
